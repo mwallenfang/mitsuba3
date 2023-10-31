@@ -127,7 +127,13 @@ template <typename Ptr, typename Cls> void bind_shape_generic(Cls &cls) {
             [](Ptr shape) {
                 return shape->surface_area();
             },
-            D(Shape, surface_area));
+            D(Shape, surface_area))
+     .def("get_out_pos",
+          [](Ptr shape, const SurfaceInteraction3f &si, Float epsilon, const Vector3f &out_dir) {
+               return shape->get_out_pos(si, epsilon, out_dir);
+          },
+          "si"_a, "epsilon"_a, "out_dir"_a,
+          D(Shape, get_out_pos));
 
     if constexpr (dr::is_array_v<Ptr>)
         bind_drjit_ptr_array(cls);
@@ -147,7 +153,8 @@ MI_PY_EXPORT(Shape) {
         .def_method(Shape, is_mesh)
         .def_method(Shape, parameters_grad_enabled)
         .def_method(Shape, primitive_count)
-        .def_method(Shape, effective_primitive_count);
+        .def_method(Shape, effective_primitive_count)
+        .def_method(Shape, get_out_pos);
 
     bind_shape_generic<Shape *>(shape);
 

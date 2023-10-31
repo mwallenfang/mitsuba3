@@ -550,6 +550,12 @@ public:
         return oss.str();
     }
 
+    Vector3f get_out_pos(const SurfaceInteraction3f &si, Float epsilon, const Vector3f &out_dir) const override {
+        
+        
+        return si.p;
+    }
+
     MI_DECLARE_CLASS()
 private:
     field<Float> m_radius, m_length;

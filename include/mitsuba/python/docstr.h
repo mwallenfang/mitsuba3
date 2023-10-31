@@ -7562,6 +7562,8 @@ R"doc(Returns whether this shape contains the specified attribute.
 Parameter ``name``:
     Name of the attribute)doc";
 
+static const char *__doc_mitsuba_Shape_get_out_pos = R"doc(Return the position on the surface of the cylinder in the given direction)doc";
+
 static const char *__doc_mitsuba_Shape_id = R"doc(Return a string identifier)doc";
 
 static const char *__doc_mitsuba_Shape_initialize = R"doc()doc";

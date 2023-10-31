@@ -256,6 +256,7 @@ public:
     //! @{ \name Miscellaneous query routines
     // =============================================================
 
+
     /**
      * \brief Return an axis aligned box that bounds all shape primitives
      * (including any transformations that may have been applied to them)
@@ -378,6 +379,11 @@ public:
     // =============================================================
     //! @{ \name Miscellaneous
     // =============================================================
+
+
+    virtual Vector3f get_out_pos(const SurfaceInteraction3f &si, Float epsilon, const Vector3f &out_dir) const {
+        return si.p;
+    }
 
     /// Return a string identifier
     std::string id() const override { return m_id; }
@@ -672,6 +678,7 @@ DRJIT_VCALL_TEMPLATE_BEGIN(mitsuba::Shape)
     DRJIT_VCALL_METHOD(sample_direction)
     DRJIT_VCALL_METHOD(pdf_direction)
     DRJIT_VCALL_METHOD(surface_area)
+    DRJIT_VCALL_METHOD(get_out_pos)
     DRJIT_VCALL_GETTER(emitter, const typename Class::Emitter *)
     DRJIT_VCALL_GETTER(sensor, const typename Class::Sensor *)
     DRJIT_VCALL_GETTER(bsdf, const typename Class::BSDF *)

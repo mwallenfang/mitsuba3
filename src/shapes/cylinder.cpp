@@ -106,6 +106,10 @@ public:
         ScalarPoint3f p0 = props.get<ScalarPoint3f>("p0", ScalarPoint3f(0.f, 0.f, 0.f)),
                       p1 = props.get<ScalarPoint3f>("p1", ScalarPoint3f(0.f, 0.f, 1.f));
 
+        m_p0 = p0;
+        m_p1 = p1;
+        m_my_radius = radius;
+
         ScalarVector3f d = p1 - p0;
         ScalarFloat length = dr::norm(d);
 
@@ -551,15 +555,30 @@ public:
     }
 
     Vector3f get_out_pos(const SurfaceInteraction3f &si, Float epsilon, const Vector3f &out_dir) const override {
+        // Find point outside of hair along the outside direction coming from the middle of the cylinder, which is defined by p0, p1 and its radius
+        Vector3f hit_pos = si.p;
+        Vector3f dir = dr::normalize(m_p1-m_p0);
+
+        // Find the closest point in the middle of the line
+        Float t = dr::dot(hit_pos - m_p0, m_p0-m_p1) / dr::dot(m_p0-m_p1, m_p0-m_p1);
+
+        t = dr::clamp(t, 0., 1.);
+
+        Point3f cylinder_pos = m_p0 + t * dir;
         
-        
-        return si.p;
+        Float pi = Float(3.141592);
+        Float length = m_my_radius * dr::tan(dr::dot(dir, out_dir) * pi) + epsilon;
+
+
+        return cylinder_pos + length * out_dir;
     }
 
     MI_DECLARE_CLASS()
 private:
+    Vector3f m_p0,m_p1;
     field<Float> m_radius, m_length;
     Float m_inv_surface_area;
+    Float m_my_radius;
     bool m_flip_normals;
 };
 

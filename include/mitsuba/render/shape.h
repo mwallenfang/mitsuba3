@@ -385,6 +385,10 @@ public:
         return si.p;
     }
 
+    virtual Vector3f get_dir() const {
+        return Vector3f(0.,0.,0.);
+    }
+
     /// Return a string identifier
     std::string id() const override { return m_id; }
 
@@ -679,6 +683,7 @@ DRJIT_VCALL_TEMPLATE_BEGIN(mitsuba::Shape)
     DRJIT_VCALL_METHOD(pdf_direction)
     DRJIT_VCALL_METHOD(surface_area)
     DRJIT_VCALL_METHOD(get_out_pos)
+    DRJIT_VCALL_METHOD(get_dir)
     DRJIT_VCALL_GETTER(emitter, const typename Class::Emitter *)
     DRJIT_VCALL_GETTER(sensor, const typename Class::Sensor *)
     DRJIT_VCALL_GETTER(bsdf, const typename Class::BSDF *)

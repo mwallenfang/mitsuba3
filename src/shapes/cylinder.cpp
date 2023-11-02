@@ -573,6 +573,10 @@ public:
         return cylinder_pos + length * out_dir;
     }
 
+    Vector3f get_dir() const override {
+        return dr::normalize(m_p1-m_p0);
+    }
+
     MI_DECLARE_CLASS()
 private:
     Vector3f m_p0,m_p1;

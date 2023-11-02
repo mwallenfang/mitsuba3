@@ -133,7 +133,12 @@ template <typename Ptr, typename Cls> void bind_shape_generic(Cls &cls) {
                return shape->get_out_pos(si, epsilon, out_dir);
           },
           "si"_a, "epsilon"_a, "out_dir"_a,
-          D(Shape, get_out_pos));
+          D(Shape, get_out_pos))
+     .def("get_dir",
+          [](Ptr shape) {
+               return shape->get_dir();
+          },
+          D(Shape, get_dir));
 
     if constexpr (dr::is_array_v<Ptr>)
         bind_drjit_ptr_array(cls);
@@ -154,7 +159,8 @@ MI_PY_EXPORT(Shape) {
         .def_method(Shape, parameters_grad_enabled)
         .def_method(Shape, primitive_count)
         .def_method(Shape, effective_primitive_count)
-        .def_method(Shape, get_out_pos);
+        .def_method(Shape, get_out_pos)
+        .def_method(Shape, get_dir);
 
     bind_shape_generic<Shape *>(shape);
 

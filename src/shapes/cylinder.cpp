@@ -556,21 +556,32 @@ public:
 
     Vector3f get_out_pos(const SurfaceInteraction3f &si, Float epsilon, const Vector3f &out_dir) const override {
         // Find point outside of hair along the outside direction coming from the middle of the cylinder, which is defined by p0, p1 and its radius
-        Vector3f hit_pos = si.p;
-        Vector3f dir = dr::normalize(m_p1-m_p0);
+        Vector3f hit_pos = si.to_local(si.p);
+        Vector3f dir = m_p0-m_p1;
 
         // Find the closest point in the middle of the line
         Float t = dr::dot(hit_pos - m_p0, m_p0-m_p1) / dr::dot(m_p0-m_p1, m_p0-m_p1);
 
         t = dr::clamp(t, 0., 1.);
-
-        Point3f cylinder_pos = m_p0 + t * dir;
         
-        Float pi = Float(3.141592);
-        Float length = m_my_radius * dr::tan(dr::dot(dir, out_dir) * pi) + epsilon;
+        t = si.uv[1];
 
+        Point3f cylinder_pos = m_p0 - t * dir;
+        
+        // Float length = m_my_radius * dr::tan(dr::dot(dir, out_dir) * dr::Pi<Float>) + epsilon;
+        Float angle_dot = dr::dot(dr::normalize(out_dir), si.to_local(dr::normalize(dir)));
+        
+        // if (angle_dot < epsilon) {
+        //     return Vector3f(0.,0.,0.);
+        // }
 
-        return cylinder_pos + length * out_dir;
+        Float length = m_my_radius / dr::sqrt(1. - (angle_dot * angle_dot)) + epsilon;
+        return si.to_world(cylinder_pos + length * dr::normalize(out_dir));
+        // return si.to_world(cylinder_pos);
+        // return Vector3f(length, angle_dot, angle_dot * angle_dot);
+        // return Vector3f(angle_dot, angle_dot, angle_dot);
+        // return dr::normalize(out_dir);
+        // return Vector3f(dr::normalize(out_dir), dr::normalize(dir), dr::dot(dr::normalize(out_dir), dr::normalize(dir)));
     }
 
     Vector3f get_dir() const override {
@@ -582,7 +593,7 @@ private:
     Vector3f m_p0,m_p1;
     field<Float> m_radius, m_length;
     Float m_inv_surface_area;
-    Float m_my_radius;
+    Float m_my_radius, m_my_length;
     bool m_flip_normals;
 };
 

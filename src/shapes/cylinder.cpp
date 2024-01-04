@@ -570,11 +570,11 @@ public:
         // if (angle_dot < epsilon) {
         //     return Vector3f(0.,0.,0.);
         // }
-        Float shift = shift * 2. - 1.;
+        Float scaled_shift = shift * 2. - 1.;
 
         Vector3f side = dr::normalize(dr::cross(dir, out_dir));
 
-        cylinder_pos += side * shift * m_my_radius;
+        cylinder_pos += side * scaled_shift * m_my_radius;
 
         Float length = m_my_radius / dr::sqrt(1. - (angle_dot * angle_dot)) + epsilon;
         return cylinder_pos + length * dr::normalize(out_dir);

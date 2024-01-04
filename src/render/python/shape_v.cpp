@@ -132,7 +132,7 @@ template <typename Ptr, typename Cls> void bind_shape_generic(Cls &cls) {
           [](Ptr shape, const SurfaceInteraction3f &si, Float epsilon, const Vector3f &out_dir, Float shift) {
                return shape->get_out_pos(si, epsilon, out_dir, shift);
           },
-          "si"_a, "epsilon"_a, "out_dir"_a, "shift"_a
+          "si"_a, "epsilon"_a, "out_dir"_a, "shift"_a,
           D(Shape, get_out_pos))
      .def("get_dir",
           [](Ptr shape) {

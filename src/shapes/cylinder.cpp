@@ -554,7 +554,7 @@ public:
         return oss.str();
     }
 
-    Vector3f get_out_pos(const SurfaceInteraction3f &si, Float epsilon, const Vector3f &out_dir) const override {
+    Vector3f get_out_pos(const SurfaceInteraction3f &si, Float epsilon, const Vector3f &out_dir, Float shift) const override {
         // Find point outside of hair along the outside direction coming from the middle of the cylinder, which is defined by p0, p1 and its radius
         // Vector3f hit_pos = si.p;
         Vector3f dir = m_p0-m_p1;
@@ -570,6 +570,11 @@ public:
         // if (angle_dot < epsilon) {
         //     return Vector3f(0.,0.,0.);
         // }
+        Float shift = shift * 2. - 1.;
+
+        Vector3f side = dr::normalize(dr::cross(dir, out_dir));
+
+        cylinder_pos += side * shift * m_my_radius;
 
         Float length = m_my_radius / dr::sqrt(1. - (angle_dot * angle_dot)) + epsilon;
         return cylinder_pos + length * dr::normalize(out_dir);

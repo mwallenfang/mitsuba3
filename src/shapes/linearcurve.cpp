@@ -383,6 +383,10 @@ public:
         return dr::grad_enabled(m_control_points);
     }
 
+    Vector3f get_out_pos(const SurfaceInteraction3f &si, Float epsilon, const Vector3f &out_dir) const {
+        return si.p;
+    }
+
 #if defined(MI_ENABLE_EMBREE)
     RTCGeometry embree_geometry(RTCDevice device) override {
         dr::eval(m_control_points); // Make sure the buffer is evaluated

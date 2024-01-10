@@ -578,11 +578,6 @@ public:
 
         Float length = m_my_radius / dr::sqrt(1. - (angle_dot * angle_dot)) + epsilon;
         return cylinder_pos + length * dr::normalize(out_dir);
-        // return si.to_world(cylinder_pos);
-        // return Vector3f(length, angle_dot, angle_dot * angle_dot);
-        // return Vector3f(angle_dot, angle_dot, angle_dot);
-        // return dr::normalize(out_dir);
-        // return Vector3f(dr::normalize(out_dir), dr::normalize(dir), dr::dot(dr::normalize(out_dir), dr::normalize(dir)));
     }
 
     Vector3f get_dir() const override {

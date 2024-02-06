@@ -233,9 +233,25 @@ public:
 
             bsdf_weight = si.to_world_mueller(bsdf_weight, -bsdf_sample.wo, si.wi);
 
-            ray = si.spawn_ray(si.to_world(bsdf_sample.wo));
 
-            ray.o = si.shape->get_out_pos(si, Float(0.0001f), si.to_world(bsdf_sample.wo), Float(0.f));
+            // ---------------------- BSSRDF application ----------------------
+
+            // Select new ray depending on the sampled_type of the bsdf.
+            // Either it interacted and we change the direction and position
+            // Or it didn't interact and we simply change the position to be behind the object
+            Bool did_interact = has_flag(bsdf_sample.sampled_type, BSDFFlags::Null);
+            auto interacted_ray = si.spawn_ray(si.to_world(bsdf_sample.wo));
+            
+
+            interacted_ray.o = si.shape->get_out_pos(si, Float(0.0001f), si.to_world(bsdf_sample.wo), sampler->next_1d());
+
+            auto non_interacted_ray = ray;
+
+            // TODO: Find side offset from the angle between
+            non_interacted_ray.o = si.shape->get_out_pos(si, Float(0.0001f), si.wi, sampler->next_1d());
+
+            ray = dr::select(did_interact, interacted_ray, non_interacted_ray);
+
 
             /* When the path tracer is differentiated, we must be careful that
                the generated Monte Carlo samples are detached (i.e. don't track

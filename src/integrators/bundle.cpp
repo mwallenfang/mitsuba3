@@ -239,7 +239,7 @@ public:
             // Select new ray depending on the sampled_type of the bsdf.
             // Either it interacted and we change the direction and position
             // Or it didn't interact and we simply change the position to be behind the object
-            Bool did_interact = has_flag(bsdf_sample.sampled_type, BSDFFlags::Null);
+            Bool did_interact = has_flag(bsdf_sample.sampled_type, BSDFFlags::DeltaTransmission);
             auto interacted_ray = si.spawn_ray(si.to_world(bsdf_sample.wo));
             
 
